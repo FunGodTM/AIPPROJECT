@@ -1,0 +1,291 @@
+"""
+Mafia Game Bot
+
+Этот бот реализует текстовую версию игры "Мафия" с использованием Telegram Bot API.
+"""
+
+"""
+
+logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+Настройка логирования для работы с событиями и командами бота.
+
+Логирование используется для отслеживания вызовов команд,
+состояния игры и обработки ошибок.
+"""
+
+"""
+
+game_data = {
+    "players": [],
+    "started": False,
+    "mafia_target": None,
+    "commissioner_target": None,
+    "doctor_target": None,
+    "phase": "day"  # Текущая фаза: "day" или "night"
+}
+
+Словарь `game_data` используется для хранения текущего состояния игры.
+
+Поля:
+    players (list): Список зарегистрированных игроков, каждый из которых представлен словарём с ключами 'id' и 'name'.
+    started (bool): Статус игры (началась или нет).
+    mafia_target (str): Имя игрока, выбранного мафией в текущей ночной фазе.
+    commissioner_target (str): Имя игрока, проверяемого комиссаром в текущей ночной фазе.
+    doctor_target (str): Имя игрока, которого лечит доктор в текущей ночной фазе.
+    phase (str): Текущая фаза игры ('day' или 'night').
+"""
+
+"""
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+
+
+    Обрабатывает команду /start.
+
+    Функция приветствует пользователя и предоставляет информацию о доступных командах.
+    Используется для начала взаимодействия с ботом.
+
+    Args:
+        update (telegram.Update): Объект Telegram, содержащий данные о сообщении пользователя.
+        context (telegram.ext.ContextTypes.DEFAULT_TYPE): Контекст выполнения команды, передаваемый Telegram Bot API.
+
+    Returns:
+        None
+"""
+
+"""
+
+async def join(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+
+    Обрабатывает команду /join.
+
+    Функция позволяет пользователю присоединиться к текущей игре, если она ещё не началась.
+    Если игра уже началась или пользователь уже зарегистрирован, выдаёт соответствующее сообщение.
+
+    Args:
+        update (telegram.Update): Объект Telegram, содержащий данные о событии (сообщении).
+        context (telegram.ext.ContextTypes.DEFAULT_TYPE): Контекст выполнения команды, передаваемый Telegram Bot API.
+
+    Returns:
+        None
+"""
+
+"""
+
+def bot_choose_target(exclude_names):
+
+    Выбирает случайную цель для действия бота.
+
+    Эта функция используется для выбора цели, на которую бот будет направлять свои действия,
+    исключая указанных игроков.
+
+    Args:
+        players (list[dict]): Список игроков. Каждый игрок представлен словарём с полями "name" и другими атрибутами.
+        exclude (list[str]): Список имён игроков, которых нужно исключить из выбора.
+
+    Returns:
+        str: Имя выбранного игрока.
+
+    Raises:
+        ValueError: Если все игроки находятся в списке исключений.
+"""
+
+"""
+
+async def notify_all_players(context: ContextTypes.DEFAULT_TYPE, message: str) -> None:
+
+    Отправляет сообщение всем активным игрокам.
+
+    Эта функция используется для рассылки сообщений всем игрокам,
+    зарегистрированным в текущей игре.
+
+    Args:
+        context (telegram.ext.ContextTypes.DEFAULT_TYPE): Контекст выполнения команды.
+        message (str): Текст сообщения, который нужно отправить всем игрокам.
+
+    Returns:
+        None
+
+    Raises:
+        KeyError: Если игрок не имеет поля 'id'.
+"""
+
+"""
+
+async def players(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+
+    Обрабатывает команду /players.
+
+    Функция отображает список текущих игроков в игре. Если в игре нет зарегистрированных игроков,
+    выводит сообщение об отсутствии участников.
+
+    Args:
+        update (telegram.Update): Объект Telegram, содержащий данные о событии (сообщении).
+        context (telegram.ext.ContextTypes.DEFAULT_TYPE): Контекст выполнения команды, передаваемый Telegram Bot API.
+
+    Returns:
+        None
+"""
+
+"""
+
+async def start_game(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+
+
+    Обрабатывает команду /start_game.
+
+    Функция проверяет, достаточно ли игроков для начала игры. Если количество игроков меньше 5,
+    выводится сообщение о невозможности начать игру. В случае успеха распределяются роли между игроками,
+    и игра начинается.
+
+    Args:
+        update (telegram.Update): Объект Telegram, содержащий данные о событии (сообщении).
+        context (telegram.ext.ContextTypes.DEFAULT_TYPE): Контекст выполнения команды, передаваемый Telegram Bot API.
+
+    Returns:
+        None
+
+    Raises:
+        Exception: Если количество игроков меньше минимально необходимого для игры.
+"""
+
+"""
+
+async def end_game(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+
+    Обрабатывает команду /end_game.
+
+    Функция завершает текущую игру, очищая все данные об игре, такие как список игроков,
+    статус игры, текущая фаза и другие параметры. Если игра не была начата, выводится соответствующее уведомление.
+
+    Args:
+        update (telegram.Update): Объект Telegram, содержащий данные о событии (сообщении).
+        context (telegram.ext.ContextTypes.DEFAULT_TYPE): Контекст выполнения команды, передаваемый Telegram Bot API.
+
+    Returns:
+        None
+"""
+
+"""
+
+async def start_night_phase(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+
+    Начинает ночную фазу игры.
+
+    Функция переводит игру в фазу ночи и сбрасывает цели для действий мафии, комиссара и доктора.
+    Уведомляет игроков о начале ночной фазы и отправляет инструкции:
+    - Мафия выбирает цель для убийства.
+    - Комиссар выбирает цель для проверки.
+    - Доктор выбирает цель для лечения.
+
+    Args:
+        update (telegram.Update): Объект Telegram, содержащий данные о событии (сообщении).
+        context (telegram.ext.ContextTypes.DEFAULT_TYPE): Контекст выполнения команды, передаваемый Telegram Bot API.
+
+    Returns:
+        None
+
+    Raises:
+        None
+"""
+
+"""
+
+async def end_night(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+
+    Обрабатывает команду /end_night.
+
+    Функция завершает ночную фазу игры, применяя результаты действий игроков:
+    - Мафия выбирает жертву для убийства.
+    - Доктор выбирает цель для спасения.
+    - Если жертва мафии совпадает с целью доктора, жертва остаётся в живых.
+    - Убитый игрок удаляется из списка игроков.
+    После завершения ночной фазы игра переходит к дневной фазе.
+
+    Args:
+        update (telegram.Update): Объект Telegram, содержащий данные о событии (сообщении).
+        context (telegram.ext.ContextTypes.DEFAULT_TYPE): Контекст выполнения команды, передаваемый Telegram Bot API.
+
+    Returns:
+        None
+
+    Raises:
+        None
+"""
+
+"""
+
+async def start_discussion(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+
+    Обрабатывает команду /start_discussion.
+
+    Запускает фазу обсуждения в игре:
+    - Проверяет, начата ли игра и находится ли она в дневной фазе.
+    - Переводит игру в фазу обсуждения ("discussion").
+    - Уведомляет всех игроков о начале обсуждения.
+
+    Args:
+        update (telegram.Update): Объект Telegram, содержащий информацию о событии.
+        context (telegram.ext.ContextTypes.DEFAULT_TYPE): Контекст выполнения команды.
+
+    Returns:
+        None
+
+    Raises:
+        Exception: Если игра не начата или находится не в дневной фазе.
+"""
+
+"""
+
+async def end_discussion(context: ContextTypes.DEFAULT_TYPE) -> None:
+
+    Завершает фазу обсуждения и переходит к голосованию.
+
+    Эта функция вызывается для окончания фазы обсуждения, после чего начинается фаза голосования.
+    Сообщение о завершении обсуждения отправляется всем активным игрокам.
+
+    Args:
+        update (telegram.Update): Объект Telegram, содержащий информацию о событии.
+        context (telegram.ext.ContextTypes.DEFAULT_TYPE): Контекст выполнения команды.
+
+    Returns:
+        None
+"""
+
+"""
+
+async def end_day(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+
+    Обрабатывает команду /end_day.
+
+    Завершает дневную фазу игры:
+    - Подводит итоги голосования.
+    - Исключает игрока с наибольшим количеством голосов (если есть).
+    - При равном количестве голосов никого не исключает.
+    - Проверяет условия завершения игры (победа мафии или мирных жителей).
+    - Переводит игру в ночную фазу.
+
+    Args:
+        update (telegram.Update): Объект Telegram, содержащий информацию о событии.
+        context (telegram.ext.ContextTypes.DEFAULT_TYPE): Контекст выполнения команды.
+
+    Returns:
+        None
+
+    Raises:
+        Exception: Если игра не находится в фазе голосования ("voting").
+"""
+
+
+
+
+
+
+
+
+
+
+
+
+
